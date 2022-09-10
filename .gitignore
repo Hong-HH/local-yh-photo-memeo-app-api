@@ -1,4 +1,7 @@
 test_info.txt
+utils.py
+config.py
+mysql_connection.py
 
 
 # Byte-compiled / optimized / DLL files
