@@ -56,7 +56,7 @@ class LogoutResource(Resource) :
         except Error as e:
             print("로그아웃중 문제 발생")
             print('Error', e)
-            return {'error' : ''} , HTTPStatus.BAD_REQUEST
+            return {'status' : 500, 'message' : "로그아웃 중 문제 발생"} 
         # finally는 필수는 아니다.
         finally :
             if connection.is_connected():
@@ -69,4 +69,4 @@ class LogoutResource(Resource) :
 
         # 실제는 에러코드를 보낸다. 문자로 소통하지 않음. error 0 는 ok 라던가
         # 대기업의 api를 보고 흉내낼것
-        return {'result':'로그아웃 되었습니다.'}
+        return {'message':'로그아웃 되었습니다.', 'status': 200 }

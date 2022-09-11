@@ -28,13 +28,14 @@ class UserRegisterResource(Resource) :
         except EmailNotValidError as e:
             # email is not valid, exception message is human-readable
             print(str(e))
-            return {'error' : 400 , 'result' : '이메일 주소가 잘못되었습니다.'} , HTTPStatus.BAD_REQUEST
+            return {'status' : 400 , 'message' : '이메일 주소가 잘못되었습니다.'} 
 
 
         # 3. 비밀번호 길이 같은 조건이 있는지 확인하는 코드
         #    잘못되었으면, 클라이언트에 응답한다.
         if len(data['password']) < 4 or  len(data['password']) > 10 :
-            return {'error' : 400, 'result' : '비밀번호의 길이를 확인하세요'}, HTTPStatus.BAD_REQUEST
+            return {'status' : 400, 'message' : '비밀번호의 길이를 확인하세요'}
+
 
         # 4. 비밀번호를 암호화한다.
         hashed_password = hash_password(data['password'])
@@ -49,7 +50,7 @@ class UserRegisterResource(Resource) :
         except Error as e:
             print('Error', e)
 
-            return {'error' : 500 , 'result' : 'db연결에 실패했습니다.'} , HTTPStatus.INTERNAL_SERVER_ERROR
+            return {'status' : 500 , 'message' : 'db연결에 실패했습니다.'} 
         
         # 이메일이 중복인지 확인하기
         try :
@@ -69,13 +70,13 @@ class UserRegisterResource(Resource) :
             print(record_list)
 
             if len( record_list ) == 1 :
-                return {'error' : 400 , 'result' : '이미 계정이 있습니다.'}, HTTPStatus.BAD_REQUEST
+                return {'status' : 400 , 'message' : '이미 계정이 있습니다.'}
     
             
         # 위의 코드를 실행하다가, 문제가 생기면, except를 실행하라는 뜻.
         except Error as e :
             print('Error while connecting to MySQL', e)
-            return {'error' : 500, 'result' : str(e)} , HTTPStatus.INTERNAL_SERVER_ERROR
+            return {'status' : 500, 'message' : str(e)} 
         
         # 닉네임이 중복인지 확인하기
         try :
@@ -95,13 +96,13 @@ class UserRegisterResource(Resource) :
             print(record_list)
 
             if len( record_list ) == 1 :
-                return {'error' : 400 , 'result' : '해당 닉네임은 이미 존재합니다.'}, HTTPStatus.BAD_REQUEST
+                return {'status' : 400 , 'message' : '해당 닉네임은 이미 존재합니다.'}
     
             
         # 위의 코드를 실행하다가, 문제가 생기면, except를 실행하라는 뜻.
         except Error as e :
             print('Error while connecting to MySQL', e)
-            return {'error' : 500, 'result' : str(e)} , HTTPStatus.INTERNAL_SERVER_ERROR
+            return {'status' : 500, 'message' : str(e)} 
 
 
         # 5. 데이터를 db에 저장한다.
@@ -128,8 +129,7 @@ class UserRegisterResource(Resource) :
             
         except Error as e:
             print('Error', e)
-            return {'error' : 500, 'result' : str(e)} , HTTPStatus.INTERNAL_SERVER_ERROR
-        
+            return {'status' : 500, 'message' : str(e)} 
         # finally는 필수는 아니다.
         finally :
             if connection.is_connected():
@@ -145,4 +145,4 @@ class UserRegisterResource(Resource) :
         access_token = create_access_token(user_id, expires_delta=False)
 
         # 8. 모든것이 정상이면, 회원가입 잘 되었다고 응답한다. 
-        return {'error' : 200 , 'result' : access_token}, HTTPStatus.OK
+        return {'status' : 200 , 'message' : access_token}

@@ -12,6 +12,7 @@ from config import Config
 from resources.register import UserRegisterResource
 from resources.logout import LogoutResource
 from resources.blocklist import check_blocklist
+from resources.login import UserLoginResource
 
 
 
@@ -65,7 +66,7 @@ api = Api(app, errors=CUSTOM_ERRORS)
 # todo 리소스 생성완료시 하나씩 주석 해재해서 테스트하기
 
 api.add_resource(UserRegisterResource, '/v1/user/register')
-# api.add_resource(UserLoginResource, '/v1/user/login')
+api.add_resource(UserLoginResource, '/v1/user/login')
 api.add_resource(LogoutResource, '/v1/user/logout')
 # api.add_resource(MemoListResource, '/v1/memo')
 # api.add_resource(MemoResource, '/v1/memo/<int:memo_id>')
