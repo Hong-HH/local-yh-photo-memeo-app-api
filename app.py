@@ -7,6 +7,11 @@ from http import HTTPStatus
 
 from config import Config
 
+# resource 클래스 import
+from resources.register import UserRegisterResource
+
+
+
 app = Flask(__name__)
 
 # 환경 변수 세팅
@@ -32,7 +37,7 @@ api = Api(app)
 # resources 와 연결 
 # todo 리소스 생성완료시 하나씩 주석 해재해서 테스트하기
 
-# api.add_resource(UserRegisterResource, '/v1/user/register')
+api.add_resource(UserRegisterResource, '/v1/user/register')
 # api.add_resource(UserLoginResource, '/v1/user/login')
 # api.add_resource(LogoutResource, '/v1/user/logout')
 # api.add_resource(MemoListResource, '/v1/memo')
