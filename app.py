@@ -3,6 +3,7 @@ from flask.json import jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended.exceptions import RevokedTokenError
+from jwt.exceptions import ExpiredSignatureError
 
 from http import HTTPStatus
 
@@ -13,7 +14,7 @@ from resources.register import UserRegisterResource
 from resources.logout import LogoutResource
 from resources.blocklist import check_blocklist
 from resources.login import UserLoginResource
-
+from resources.memo import MemoListResource
 
 
 
@@ -38,6 +39,9 @@ def check_if_token_is_revoked(jwt_header, jwt_payload) :
     return result
 
 
+# 위아래 관련 코드 참고사이트
+# https://flask-jwt-extended.readthedocs.io/en/stable/api/
+
 
 # 만료된 토큰일 경우의 반환값
 # 테스트 필요 : 현재는 토큰 만료가 안되게 설정해서 ... 
@@ -49,9 +53,14 @@ def check_if_token_is_revoked(jwt_header, jwt_payload) :
 
 # catch 하고싶은 에러 
 CUSTOM_ERRORS = {
-'RevokedTokenError': {
+    'RevokedTokenError': {
         'message': "이미 로그아웃 되었습니다(401 Unauthorized).", 'status' : 401
-    },
+    }, 
+    'ExpiredSignatureError' : {
+        'message': "jwt 토큰이 만료되었습니다. 다시로그인해주세요.", 'status' : 500
+    }
+
+
 }
 
 
@@ -68,7 +77,7 @@ api = Api(app, errors=CUSTOM_ERRORS)
 api.add_resource(UserRegisterResource, '/v1/user/register')
 api.add_resource(UserLoginResource, '/v1/user/login')
 api.add_resource(LogoutResource, '/v1/user/logout')
-# api.add_resource(MemoListResource, '/v1/memo')
+api.add_resource(MemoListResource, '/v1/memo')
 # api.add_resource(MemoResource, '/v1/memo/<int:memo_id>')
 
 
