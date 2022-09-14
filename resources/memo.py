@@ -59,6 +59,10 @@ class MemoListResource(Resource) :
             else :
                 i = 0
                 for record in record_list:
+                    # todo 수정할지 체크 
+                    print(Config.BUCKET_URL )
+                    print(record_list[i]['photo_url'])
+                    record_list[i]['photo_url'] = Config.BUCKET_URL + record_list[i]['photo_url']
                     record_list[i]['created_at'] = record['created_at'].isoformat()
                     record_list[i]['updated_at'] = record['updated_at'].isoformat()
                     record_list[i]['date'] = record['date'].isoformat()
