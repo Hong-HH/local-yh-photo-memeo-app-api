@@ -161,3 +161,58 @@ class MemoListResource(Resource) :
             
             return {'status' : 200, 'message' : '업로드 되었습니다.'}
 
+
+
+class MemoCountResource(Resource) :
+    @jwt_required()
+    def get(self) : 
+        user_id = get_jwt_identity()
+        print(user_id)
+
+        try :
+            # 클라이언트가 GET 요청하면, 이 함수에서 우리가 코드를 작성해 주면 된다.
+            
+            # 1. db 접속
+            connection = get_connection()
+
+            # 2. 해당 테이블, recipe 테이블에서 select
+            query = ''' SELECT user_id , count(*) as total FROM memo
+                        where user_id = %s; '''
+            
+            record = (user_id, )
+            cursor = connection.cursor(dictionary = True)
+            cursor.execute(query, record)
+            # select 문은 아래 내용이 필요하다.
+            # 커서로 부터 실행한 결과 전부를 받아와라.
+            record_list = cursor.fetchall()
+            print(record_list)
+
+            
+        # 3. 클라이언트에 보낸다. 
+        except Error as e :
+            # 뒤의 e는 에러를 찍어라 error를 e로 저장했으니까!
+            print('Error while connecting to MySQL', e)
+            return {'status' : 500, 'count' : 0, 'list' : []}
+        # finally 는 try에서 에러가 나든 안나든, 무조건 실행하라는 뜻.
+        finally : 
+            print('finally')
+            if connection.is_connected():
+                cursor.close()
+                connection.close()
+                print('MySQL connection is closed')
+            else :
+                print('connection does not exist')
+
+        
+        # 현재 return 형식
+        # {
+        #     "status": 200,
+        #     "message": [
+        #         {
+        #             "user_id": 3,
+        #             "total": 13
+        #         }
+        #     ]
+        # }
+
+        return {'status' : 200, 'message' : record_list}

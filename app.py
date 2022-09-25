@@ -14,7 +14,7 @@ from resources.register import UserRegisterResource
 from resources.logout import LogoutResource
 from resources.blocklist import check_blocklist
 from resources.login import UserLoginResource
-from resources.memo import MemoListResource
+from resources.memo import MemoListResource, MemoCountResource
 from resources.memo_change import MemoResource
 
 
@@ -80,6 +80,7 @@ api.add_resource(UserLoginResource, '/v1/user/login')
 api.add_resource(LogoutResource, '/v1/user/logout')
 api.add_resource(MemoListResource, '/v1/memo')
 api.add_resource(MemoResource, '/v1/memo/<int:memo_id>')
+api.add_resource(MemoCountResource, '/v1/memo/count')
 
 
 # 연결확인용 
