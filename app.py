@@ -58,10 +58,8 @@ CUSTOM_ERRORS = {
         'message': "이미 로그아웃 되었습니다(401 Unauthorized).", 'status' : 401
     }, 
     'ExpiredSignatureError' : {
-        'message': "jwt 토큰이 만료되었습니다. 다시로그인해주세요.", 'status' : 500
+        'message': "jwt 토큰이 만료되었습니다. 다시로그인해주세요.", 'status' : 401
     }
-
-
 }
 
 
