@@ -109,6 +109,7 @@ class MemoListResource(Resource) :
         
         else :
             file = request.files['photo']
+            print(type(file))
 
             if file and allowed_file(file.filename) :
                 s3 = boto3.client('s3', aws_access_key_id = Config.ACCESS_KEY, aws_secret_access_key = Config.AWS_SECRET_ACCESS_KEY)
