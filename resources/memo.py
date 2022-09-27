@@ -110,6 +110,8 @@ class MemoListResource(Resource) :
         else :
             file = request.files['photo']
             print(type(file))
+            print("filename 은")
+            print(file.filename)
 
             if file and allowed_file(file.filename) :
                 s3 = boto3.client('s3', aws_access_key_id = Config.ACCESS_KEY, aws_secret_access_key = Config.AWS_SECRET_ACCESS_KEY)
@@ -123,6 +125,9 @@ class MemoListResource(Resource) :
                     s3.upload_fileobj(file, Config.BUCKET, filename, ExtraArgs = {'ACL' : 'public-read', 'ContentType' : file.content_type})
                 except Exception as e :
                     return {'status' : 402,'message' : str(e) }
+
+            else :
+                return {'status' : 400,'message' : "파일이 없거나 파일이름이 이상합니다."}
             
             # 디비에 문자열 데이터 저장
             try : 
